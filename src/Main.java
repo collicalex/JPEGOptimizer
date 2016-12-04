@@ -6,6 +6,7 @@ public class Main {
 	
 	/*
 	 * TODO:
+	 *  - Add parameter to not optimized already optimized files! (check if last byte is EOI or not ;))
 	 *  - Check how to create an EXE from JAR
 	 *  - Grab rotation in JPEG EXIFs
 	 *  - Auto rotate image in Viewer
