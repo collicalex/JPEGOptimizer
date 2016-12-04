@@ -137,7 +137,7 @@ public class JPEGFiles {
 	}
 	
 
-	private boolean optimize(BufferedImage img1, File tmp, int quality) throws IOException {
+	private boolean optimize(BufferedImage img1, File tmp, int quality, double maxVisualDiff) throws IOException {
 		log("   Trying quality " + quality + "%");
 		
 		if (tmp.exists()) {
@@ -159,7 +159,7 @@ public class JPEGFiles {
 		img2 = null;
 		log("   * Diff : " + ReadableUtils.rate(diff) + "\t (" + ReadableUtils.interval(end2-start2) + ")");
 		diff *= 100.;			
-		if (diff < 0.75) {
+		if (diff < maxVisualDiff) {
 			log("   [OK] Visual diff is correct.");
 			_jpegQualityFound = quality;
 			return true;
@@ -169,7 +169,7 @@ public class JPEGFiles {
 		}
 	}
 	
-	private boolean optimize(File dstDir) throws IOException {
+	private boolean optimize(File dstDir, double maxVisualDiff) throws IOException {
 		File tmp = new File(dstDir, "JpegOptimizer.tmp.jpg");
 		BufferedImage img1 = ImageIO.read(_src); 
 		
@@ -179,7 +179,7 @@ public class JPEGFiles {
 		while (minQ <= maxQ) {
 			log(" - Dichotomic search between (" + minQ + ", " + maxQ + ") qualities :");
 			int quality = (int)Math.floor((minQ + maxQ) / 2.);
-			if (optimize(img1, tmp, quality) == true) {
+			if (optimize(img1, tmp, quality, maxVisualDiff) == true) {
 				foundQuality = quality;
 				maxQ = quality-1;
 			} else {
@@ -205,7 +205,8 @@ public class JPEGFiles {
 		}
 	}
 	
-	public void optimize(File dstDir, long minFileSizeToOptimize, boolean overwriteDst) throws IOException {
+	public void optimize(File dstDir, double maxVisualDiff, long minFileSizeToOptimize, boolean overwriteDst) throws IOException {
+		System.out.println("Max Diff : " + maxVisualDiff);
 		_start = System.currentTimeMillis();
 		setState(OPTIMIZING);
 		log("Optimizing " + _src.getAbsolutePath() + " (" + ReadableUtils.fileSize(_originalSrcSize) + ")");
@@ -225,7 +226,7 @@ public class JPEGFiles {
 				}
 				setState(OPTIMIZED_UNNECESSARY);
 			} else {
-				boolean isOptimized = optimize(dstDir);
+				boolean isOptimized = optimize(dstDir, maxVisualDiff);
 				setState(isOptimized ? OPTIMIZED_OK : OPTIMIZED_KO);
 			}
 		}

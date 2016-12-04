@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.NumberFormat;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
@@ -53,6 +54,7 @@ public class Gui implements JDirectoryChooserListener, JPEGFilesListener {
 	private JDirectoryChooser _dstDir;
 	private JComboBox<Double> _minSize;
 	private JComboBox<Boolean> _overwrite;
+	private JComboBox<Double> _maxVisualDiff;
 	
 	//---------------------------------------------------------
 	
@@ -113,7 +115,7 @@ public class Gui implements JDirectoryChooserListener, JPEGFilesListener {
 		_overwrite.addItem(Boolean.FALSE);
 		_overwrite.setRenderer(new DefaultListCellRenderer() {
 			private static final long serialVersionUID = 1L;
-
+			
 			@Override
 	        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 	            Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
@@ -129,12 +131,51 @@ public class Gui implements JDirectoryChooserListener, JPEGFilesListener {
 		
 		//---------------------------------------------------------
 		
+		JLabel maxVisualDiffLabel = new JLabel(" Max Diff : ");
+		maxVisualDiffLabel.setPreferredSize(new Dimension(75, 1));
+		
+		_maxVisualDiff = new JComboBox<Double>();
+		for (int i = 0; i < 100; ++i) {
+			for (int j = 0; j <= 75; j+= 25) {
+				_maxVisualDiff.addItem(new Double(i+(j/100.)));
+			}
+		}
+		_maxVisualDiff.addItem(new Double(100));
+		
+		_maxVisualDiff.setRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+	        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+	            Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+	            component.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+	            
+	            NumberFormat percentFormat = NumberFormat.getPercentInstance();
+	            percentFormat.setMaximumFractionDigits(2);
+	            percentFormat.setMinimumFractionDigits(2);
+	            String result = percentFormat.format((Double)value/100.);
+	            
+	            JLabel label = (JLabel) component;
+	            label.setText(result);
+	            
+	            return component;
+	        }
+		});
+		
+		JPanel maxVisualDiffPanel = new JPanel(new BorderLayout());
+		maxVisualDiffPanel.add(maxVisualDiffLabel, BorderLayout.WEST);
+		maxVisualDiffPanel.add(_maxVisualDiff, BorderLayout.CENTER);		
+		
+		
+		//---------------------------------------------------------
+		
 		JPanel srcdstPanel = new JPanel();
-		srcdstPanel.setLayout(new GridLayout(4, 1));
+		srcdstPanel.setLayout(new GridLayout(5, 1));
 		srcdstPanel.add(_srcDir);
 		srcdstPanel.add(_dstDir);
 		srcdstPanel.add(minPanel);
 		srcdstPanel.add(overwritePanel);
+		srcdstPanel.add(maxVisualDiffPanel);
 		
 		//---------------------------------------------------------
 		
@@ -266,6 +307,7 @@ public class Gui implements JDirectoryChooserListener, JPEGFilesListener {
 			writer.write(_dstDir.getSelectedDirectory().getAbsolutePath() + "\n");
 			writer.write(_minSize.getSelectedIndex() + "\n");
 			writer.write(_overwrite.getSelectedIndex() + "\n");
+			writer.write(_maxVisualDiff.getSelectedIndex() + "\n");
 			writer.flush();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -289,6 +331,7 @@ public class Gui implements JDirectoryChooserListener, JPEGFilesListener {
 			_dstDir.setSelectedDirectory(reader.readLine());
 			_minSize.setSelectedIndex(Integer.parseInt(reader.readLine()));
 			_overwrite.setSelectedIndex(Integer.parseInt(reader.readLine()));
+			_maxVisualDiff.setSelectedIndex(Integer.parseInt(reader.readLine()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -304,6 +347,7 @@ public class Gui implements JDirectoryChooserListener, JPEGFilesListener {
 		_dstDir.setEnabled(state);
 		_minSize.setEnabled(state);
 		_overwrite.setEnabled(state);
+		_maxVisualDiff.setEnabled(state);
 		_optimizeButton.setEnabled(state);
 	}
 	
@@ -348,7 +392,7 @@ public class Gui implements JDirectoryChooserListener, JPEGFilesListener {
 						_jList.ensureIndexIsVisible(i);
 						if (jpegFile.getSrc() != null) {
 							try {
-								jpegFile.optimize(_dstDir.getSelectedDirectory(), minSize, overwriteDst);
+								jpegFile.optimize(_dstDir.getSelectedDirectory(), (Double)_maxVisualDiff.getSelectedItem(), minSize, overwriteDst);
 								earnSize += isNull(jpegFile.getEarnSize(), 0);
 							} catch (IOException e) {
 								e.printStackTrace();

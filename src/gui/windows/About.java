@@ -30,6 +30,7 @@ import javax.swing.border.EmptyBorder;
 public class About extends JDialog {
 
 	private static final long serialVersionUID = 1L;
+	private String _version = "v1.0 - 2016/12/04";
 
 	public About(Frame frame) {
 		super(frame, "About", true);
@@ -60,13 +61,11 @@ public class About extends JDialog {
 		cVersion.fill = GridBagConstraints.HORIZONTAL;
 		contentPanel.add(getVersionLabel(), cVersion);
 		
-		GridBagConstraints cBitbucket = new GridBagConstraints();
-		cBitbucket.gridx = 1;
-		cBitbucket.gridy = 2;
-		cBitbucket.fill = GridBagConstraints.HORIZONTAL;
-		contentPanel.add(getWebLabel("Check source and latest release","https://github.com/collicalex/JPEGOptimizer"), cBitbucket);
-		
-		
+		GridBagConstraints cGitHub = new GridBagConstraints();
+		cGitHub.gridx = 1;
+		cGitHub.gridy = 2;
+		cGitHub.fill = GridBagConstraints.HORIZONTAL;
+		contentPanel.add(getWebLabel("Check source and latest release","https://github.com/collicalex/JPEGOptimizer/releases"), cGitHub);
 		
 		GridBagConstraints cAuthor = new GridBagConstraints();
 		cAuthor.gridx = 1;
@@ -96,7 +95,7 @@ public class About extends JDialog {
 	}
 	
 	private JLabel getVersionLabel() {
-		JLabel version = new JLabel("v1.0 - 2016/12/02");
+		JLabel version = new JLabel(_version);
 		return version;
 	}
 	
