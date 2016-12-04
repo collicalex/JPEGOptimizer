@@ -321,7 +321,10 @@ public class Gui implements JDirectoryChooserListener, JPEGFilesListener {
 	
 	private void readConfig() {
 		File configFile = getConfigFile();
-		if (configFile.exists() == false) {
+		if (configFile.exists() == false) { //set default value if no ini file
+			_minSize.setSelectedIndex(10);
+			_overwrite.setSelectedIndex(1);
+			_maxVisualDiff.setSelectedIndex(3);
 			return ;
 		}
 		BufferedReader reader = null;
