@@ -1,0 +1,176 @@
+<html>
+<head>
+
+	<!-- Metas tag -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no">
+
+	<!-- Descripcion -->
+	<meta name="author" content="Alexandre Bargeton">
+	<meta name="description" content="JPEG Optimizer to optimize jpeg compression.">
+
+	<!-- CSS -->
+	<link rel="stylesheet" type="text/css" href="css/siimple.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/juxtapose.css">
+
+	<!-- GitHub buttons -->
+	<script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+	
+	
+
+</head>
+<body>
+
+	<!-- Navbar -->
+	<div class="navbar">
+		<a href="./" class="navbar-logo">JPEG Optimizer</a>
+	</div>
+
+
+<!-- Title -->
+<title>JPEG Optimizer</title>
+
+<!-- Grid main -->
+<div class="grid main">
+
+	<!-- Getting started title -->
+	<h1>JPEG Optimizer</h1>
+	
+	<!-- Description -->
+	<h2>Description</h2>
+	<p>JPEG Optimizer is designed for photographer who take a lot of pictures and so have a lot of jpeg files saved in their computer.</p>
+	<p>All theses pictures can rapidly use a lot of hard drive disc space. For example a full frame DSLR produce jpeg pictures files around 20MB and an APS-C DSLR produce jpeg files around 8MB. So having 1000 full frame pictures can take aroun 20GB of your hard drive space!</p>
+	<p>JPEG Optimizer is used to automatically optimize each JPEG picture file to reduce their file size by allowing only small visual difference (not really perceptual).</p>
+
+	<!-- How it works? -->
+	<h2>How it works?</h2>
+
+	<p>The <a href='https://en.wikipedia.org/wiki/JPEG'>JPEG</a> compression algorithm has a <i>"quality"</i> parameter which can be view as a <i>"compression level"</i>. The higher the <i>"quality"</i> is, the lower the compression is (and so the result file size is important) and vise versa.</p>
+	<p>JPEG Optimizer will try all<sup>(*)</sup>  <i>"quality"</i> parameter values (from 0% to 100%) and choose the lower one which make the visual difference to be really small and not humanly perceptual.</p>
+	<p><i><sup>(*)</sup> In fact it use the <a href='https://en.wikipedia.org/wiki/Dichotomic_search'>dichotomic search</a> which allow to find the result in only 7 steps instead of 100.</i></p>
+
+	<!-- Example result -->
+	<h2>Example result</h2>
+
+	<p>Here is one of my picture (yes, it's my cat!) displayed at 10% of it's original size. The original jpeg file, output from my camera, is 14.5MB. The optimized version jpeg file computed by JPEG Optimizer is only 1.4MB. JPEG Optimizer found that we can use a <i>quality</i> parameter value of 50% only. You can notice that it's humanly hard to view any visual difference.</p>
+
+	<p>
+		<div class="juxtapose">
+			<img src="img/originale10.png" data-label="Original (14.5MB)" alt="Original" />
+			<img src="img/compressed_10.png" data-label="Optimized (1.4MB)" alt="Optimized"/>
+		</div>
+	</p>
+
+
+	<p>Here is a crop of the picture, but displayed at 100%. You maybe can notice only really little visual differences.</p>
+
+	<p>
+		<div class="juxtapose">
+			<img src="img/original_14_5Mb.png" data-label="Original (14.5MB)" alt="Original" />
+			<img src="img/compressed_1_5Mb.png" data-label="Optimized (1.4MB)" alt="Optimized"/>
+		</div>
+	</p>
+
+	<script src='js/juxtapose.js'></script>
+
+
+	<!-- Download -->
+	<h2>Download</h2>
+
+	<p>You can download the latest version of JPEG Optimizer in the dedicated <a href='https://github.com/collicalex/JPEGOptimizer/releases'>releases page</a>.
+
+	
+	<!-- Execute -->
+	<h2>Execute</h2>
+
+	<p>To run JPEG Optimizer you just need to double click on JPEGOptimizer.jar.</p>
+
+	<p>As JPEG Optimizer manipulate large pictures files size, it will used a lot of memory (RAM).</p>
+	<p>The default Oracle JVM (Java Virtual Machine) maximum heap size is 1024MB. Which is enough. If not, you can run it via command line:</p>
+
+	<p>With 1024MB:</p>
+	<pre>java -Xmx1024m -jar JPEGOptimizer.jar</pre>
+
+	<p>With 2048MB:</p>
+
+	<pre>java -Xmx2048m -jar JPEGOptimizer.jar</pre>
+
+	<p>You can double click on JPEGOptimizer.bat to run the application with 1024MB. Feel free to edit this file to increase the max heap size parameter.</p>
+
+
+	<!-- Tutorial -->
+	<h2>Tutorial used</h2>
+
+	<h4>Main window</h4>
+
+	<p><img src='img/main_window0.png'  width='668px' height='599px'/></p>
+	<p>
+		<ol>
+			<li><b>Source :</b> The input source directory (jpeg files to otpmize). It will automatically list all jpeg files in 7</li>
+			<li><b>Destination :</b> The output source directory (where to save optimized jpeg files). It will automatically list all jpeg files in 7 (when input source directory is not empty).</li>
+			<li><b>Min file size :</b> It will not optimize jpeg file which size is greater to this value.</li>
+			<li><b>Overwrite :</b> If destination file already exist, the do not try to optimize if this parameter is set to false.</li>
+			<li><b>Max Diff :</b> It's the maximum visual difference percentage allowed between original jpeg picture and optimized jpeg one.</li>
+			<li><b>Optimize</b> button. Click on this button when you have setup all the 5 parameters</li>
+			<li><img src='img/viewer_button.png'> button. Click on one of this button to open the "viewer" to visually check the difference between original and optimized picture.</li>
+			<li>The output log which is filled during optimization process (each step is described).</li>
+			<li><b>About</b> to open the about window</li>
+		</ol>
+	</p>
+
+	<h4>Viewer</h4>
+	<p>You can open the viewer (clic on the <img src='img/viewer_button.png'> button) on any picture (one at a time) to check the difference between original version (at left) and optimized one (at right).</p>
+	<p>If the picture is already optimized, it will open the optimized version on the right part. If not, the right part will be keep black.</p>
+
+	<p><img src='img/viewer_mode1.png'  width='800px' height='600px'/></p>
+	<p>
+		<ol>
+			<li>The original jpeg picture.</li>
+			<li>The optimized jpeg picture.</li>
+			<li>The original file size.</li>
+			<li>The optimized file size.</li>
+			<li>The jpeg compression quality parameter used to create the optimized jpeg in 2.</li>
+			<li>The visual difference in percent between original and optimized pictures.</li>
+		</ol>
+	</p>
+
+	<p>You can scroll and click on any quality value in the right side (5) to display a new "optmized version", so you can easly check which "visual difference quality percent" (6) is the best for you, and use this value in parameter in the main window for all of your picture.</p>
+	<p>Example clicking on 5%:</p>
+	<p><img src='img/viewer_manual.png'  width='800px' height='600px'/></p>
+
+	<p>There are 2 displays mode in the viewer:</p>
+	<p>Split mode (as above) and a side by side mode. You can switch between by hittin the "M" key.</p>
+	<p><img src='img/viewer_mode2.png'  width='800px' height='600px'/></p>
+
+	<p>You can also display the viewer in fullscreen by hitting the 'F' key, and switch back to windowed mode with the same key.</p>
+  
+
+  	<!-- Tutorial -->
+	<h2>Want to contribute?</h2>
+	
+	<p>You can contribute with JPEG Optimizer by <a href='https://github.com/collicalex/JPEGOptimizer/releases'>installing it</a>, using it, take a look at its <a href='https://github.com/collicalex/JPEGOptimizer'>source code</a> and <a href='https://github.com/collicalex/JPEGOptimizer/issues'>submitting issues</a> and <a href='https://github.com/collicalex/JPEGOptimizer/pulls'>pull requests</a> :)</p>
+  
+  
+    <!-- Tutorial -->
+	<h2>Follow me</h2>
+	
+	<p>You can follow me:
+		<ul>
+			<li>as photographer on <a href='https://www.flickr.com/photos/colliculus'>Flickr</a></li>
+			<li>as developer on <a href='https://github.com/collicalex'>GitHub</a></li>
+		</ul>
+	</p>
+
+  
+<!-- Close the grid main -->
+</div>
+
+
+<!-- Foot -->
+<div class="foot" align="center">
+JPEG Optimizer made by <a href="https://www.flickr.com/photos/colliculus">Alexandre Bargeton</a>.
+</div>
+
+</body>
+</head>

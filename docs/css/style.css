@@ -1,0 +1,146 @@
+@import url("https://fonts.googleapis.com/css?family=Fira+Sans");
+.navbar {
+  display: block;
+  width: 100%;
+  min-height: 50px;
+  line-height: 50px;
+  background-color: #01579B;
+  color: #ffffff; }
+  .navbar-logo {
+    color: #ffffff;
+    text-decoration: none;
+    opacity: 0.8;
+    font-size: 25px;
+    font-family: Fira Sans;
+    margin-left: 20px; }
+    .navbar-logo:hover {
+      opacity: 1.0;
+      color: #ffffff;
+      text-decoration: none; }
+  .navbar-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 300;
+    margin-right: 20px;
+    float: right;
+    opacity: 0.8; }
+    .navbar-link:hover {
+      opacity: 1.0;
+      color: #ffffff;
+      text-decoration: none; }
+
+.cover {
+  display: block;
+  background-color: #09a0f6;
+  color: #ffffff;
+  padding-top: 130px;
+  padding-bottom: 190px; }
+  .cover-title {
+    display: block;
+    font-family: 'Fira Sans';
+    font-size: 100px;
+    margin-bottom: 20px; }
+  .cover-description {
+    display: block;
+    font-size: 30px;
+    margin-bottom: 10px; }
+  .cover-btn {
+    width: 150px;
+    border-color: #ffffff;
+    color: #ffffff; }
+    .cover-btn:hover {
+      color: #09a0f6;
+      background-color: #ffffff; }
+
+.main {
+  margin-top: 40px;
+  margin-bottom: 0px; }
+  .main h1 {
+    margin-top: 40px !important; }
+  .main h2 {
+    margin-top: 40px !important; }
+  .main h3 {
+    margin-top: 40px !important; }
+  .main h4 {
+    margin-top: 40px !important; }
+  .main h5 {
+    margin-top: 40px !important; }
+  .main h6 {
+    margin-top: 40px !important; }
+
+.docs-head {
+  display: block;
+  width: 100%;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  font-family: 'Fira Sans';
+  font-size: 60px;
+  color: #ffffff;
+  background-color: #09a0f6; }
+
+.docs-row {
+  margin-bottom: 20px; }
+
+.docs-col {
+  background-color: #eaf0f2;
+  border-radius: 5px; }
+
+.docs-space {
+  display: block;
+  height: 40px; }
+
+.docs-example h1 {
+  margin-bottom: 10px !important;
+  margin-top: 0px !important; }
+
+.docs-example h2 {
+  margin-bottom: 10px !important;
+  margin-top: 0px !important; }
+
+.docs-example h3 {
+  margin-bottom: 10px !important;
+  margin-top: 0px !important; }
+
+.docs-example h4 {
+  margin-bottom: 10px !important;
+  margin-top: 0px !important; }
+
+.docs-example h5 {
+  margin-bottom: 10px !important;
+  margin-top: 0px !important; }
+
+.docs-example h6 {
+  margin-bottom: 10px !important;
+  margin-top: 0px !important; }
+
+.gh-btns {
+  display: block;
+  width: 100%;
+  padding-top: 50px;
+  padding-bottom: 30px; }
+  .gh-btns h4 {
+    margin-bottom: 10px !important; }
+
+.foot {
+  display: block;
+  text-align: center;
+  width: 100%;
+  background-color: #f1f5fa;
+  font-size: 15px;
+  padding-bottom: 50px;
+  padding-top: 30px;
+  margin-top: 20px; }
+  .foot-logo {
+    display: block;
+    width: 250px;
+    color: #536273;
+    opacity: 0.7;
+    font-size: 30px;
+    font-family: Fira Sans;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px; }
+    .foot-logo:hover {
+      text-decoration: none;
+      color: #536273;
+      opacity: 1.0; }
