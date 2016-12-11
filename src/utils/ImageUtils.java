@@ -208,20 +208,23 @@ public class ImageUtils {
 	
 	//Special trick to read the quality in the last byte of the file (because JFIF/EXIF do not have this info)
 	public static int readQualityInJPEG(File input) throws IOException {
-		if ((input == null) || (input.exists() == false)) {
+		if ((input == null) || (input.exists() == false) || (input.canRead() == false)) {
 			return -1;
 		} else {
 			FileInputStream in = new FileInputStream(input);
-			in.getChannel().position(in.getChannel().size() - 2);
-			int b1 = in.read();
-			int b2 = in.read();
 			int quality = -1;
-			if ((b1 == 0xFF) && (b2 == 0xD9)) { //0xFFD9 it's the EOI (End Of Image jpeg tag), meaning JPEGOptimized does not append the quality byte
-				quality = -1;
-			} else {
-				quality = b2;
+			try {
+				in.getChannel().position(in.getChannel().size() - 2);
+				int b1 = in.read();
+				int b2 = in.read();
+				if ((b1 == 0xFF) && (b2 == 0xD9)) { //0xFFD9 it's the EOI (End Of Image jpeg tag), meaning JPEGOptimized does not append the quality byte
+					quality = -1;
+				} else {
+					quality = b2;
+				}
+			} finally {
+				in.close();
 			}
-			in.close();
 			return quality;
 		}
 	}
@@ -232,6 +235,7 @@ public class ImageUtils {
 		out.write(quality & 0x7F);
 		out.close();
 	}
+	
 
 	
 }
