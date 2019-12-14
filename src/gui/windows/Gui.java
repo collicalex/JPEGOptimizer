@@ -18,8 +18,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.DefaultListCellRenderer;
@@ -414,7 +418,8 @@ public class Gui implements JDirectoryChooserListener, JPEGFilesListener {
           // Init
           _loger.setText("");
           _jprogressBar.setValue(0);
-          for (int i = 0; i < _jList.getModel().getSize(); ++i) {
+          int numberOfImages = _jList.getModel().getSize();
+          for (int i = 0; i < numberOfImages; ++i) {
             JPEGFiles jpegFile = _jList.getModel().getElementAt(i);
             jpegFile.reinitState();
           }
@@ -423,16 +428,27 @@ public class Gui implements JDirectoryChooserListener, JPEGFilesListener {
           int numThreads = (Integer) _numThreads.getSelectedItem();
           ExecutorService threadPool = Executors.newFixedThreadPool(numThreads);
           long earnSize = 0;
-          for (int i = 0; i < _jList.getModel().getSize(); ++i) {
+          List<Future<JPEGFiles>> futures = new ArrayList<>();
+          for (int i = 0; i < numberOfImages; ++i) {
             JPEGFiles jpegFile = _jList.getModel().getElementAt(i);
             if (jpegFile.getSrc() != null) {
               OptimizerCallable callable = new OptimizerCallable(jpegFile, _dstDir.getSelectedDirectory(),
                   (Double) _maxVisualDiff.getSelectedItem(), minSize, overwriteDst);
-              threadPool.submit(callable);
-//            _jprogressBar.setValue((i * 100) / _jList.getModel().getSize());
-//            _jList.setSelectedIndex(i);
-//            _jList.ensureIndexIsVisible(i);
-//          _jList.repaint();
+              Future<JPEGFiles> future = threadPool.submit(callable);
+              futures.add(future);
+            }
+          }
+          for (int i = 0; i < numberOfImages; i++) {
+            Future<JPEGFiles> future = futures.get(i);
+            try {
+              JPEGFiles jpegFile = future.get();
+              earnSize += isNull(jpegFile.getEarnSize(), 0);
+              _jprogressBar.setValue((i * 100) / numberOfImages);
+              _jList.setSelectedIndex(i);
+              _jList.ensureIndexIsVisible(i);
+              _jList.repaint();
+            } catch (InterruptedException | ExecutionException e) {
+              e.printStackTrace();
             }
           }
           try {
