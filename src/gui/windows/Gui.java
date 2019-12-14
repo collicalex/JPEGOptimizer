@@ -18,6 +18,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
@@ -417,23 +420,26 @@ public class Gui implements JDirectoryChooserListener, JPEGFilesListener {
           }
 
           // Do compression
+          int numThreads = (Integer) _numThreads.getSelectedItem();
+          ExecutorService threadPool = Executors.newFixedThreadPool(numThreads);
           long earnSize = 0;
           for (int i = 0; i < _jList.getModel().getSize(); ++i) {
-            _jprogressBar.setValue((i * 100) / _jList.getModel().getSize());
             JPEGFiles jpegFile = _jList.getModel().getElementAt(i);
-            _jList.setSelectedIndex(i);
-            _jList.ensureIndexIsVisible(i);
             if (jpegFile.getSrc() != null) {
-              try {
-                jpegFile.optimize(_dstDir.getSelectedDirectory(), (Double) _maxVisualDiff.getSelectedItem(), minSize,
-                    overwriteDst);
-                earnSize += isNull(jpegFile.getEarnSize(), 0);
-              } catch (IOException e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(_jFrame, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-              }
-              _jList.repaint();
+              OptimizerCallable callable = new OptimizerCallable(jpegFile, _dstDir.getSelectedDirectory(),
+                  (Double) _maxVisualDiff.getSelectedItem(), minSize, overwriteDst);
+              threadPool.submit(callable);
+//            _jprogressBar.setValue((i * 100) / _jList.getModel().getSize());
+//            _jList.setSelectedIndex(i);
+//            _jList.ensureIndexIsVisible(i);
+//          _jList.repaint();
             }
+          }
+          try {
+            threadPool.awaitTermination(365, TimeUnit.DAYS);
+          } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
           }
 
           // End
