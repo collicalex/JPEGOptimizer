@@ -24,7 +24,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
@@ -55,6 +54,8 @@ import utils.ReadableUtils;
 
 public class Gui implements JDirectoryChooserListener, JPEGFilesListener {
 
+  private static int LEFT_COLUMN_WIDTH = 100;
+  private static final Dimension LABEL_PREFERRED_SIZE = new Dimension(LEFT_COLUMN_WIDTH, 1);
   private JDirectoryChooser _srcDir;
   private JDirectoryChooser _dstDir;
   private JComboBox<Double> _minSize;
@@ -80,15 +81,15 @@ public class Gui implements JDirectoryChooserListener, JPEGFilesListener {
 
     // ---------------------------------------------------------
 
-    _srcDir = new JDirectoryChooser("Source:", 75);
-    _dstDir = new JDirectoryChooser("Destination:", 75);
+    _srcDir = new JDirectoryChooser("Source:", LEFT_COLUMN_WIDTH);
+    _dstDir = new JDirectoryChooser("Destination:", LEFT_COLUMN_WIDTH);
     _srcDir.addDirectoryChooserListner(this);
     _dstDir.addDirectoryChooserListner(this);
 
     // ---------------------------------------------------------
 
     JLabel minLabel = new JLabel(" Min file size: ");
-    minLabel.setPreferredSize(new Dimension(75, 1));
+    minLabel.setPreferredSize(LABEL_PREFERRED_SIZE);
     _minSize = new JComboBox<Double>();
     for (int i = 0; i <= 100 * 10; i += 5) {
       _minSize.addItem(new Double(i / 10.));
@@ -114,7 +115,7 @@ public class Gui implements JDirectoryChooserListener, JPEGFilesListener {
     // ---------------------------------------------------------
 
     JLabel overwriteLabel = new JLabel(" Overwrite : ");
-    overwriteLabel.setPreferredSize(new Dimension(75, 1));
+    overwriteLabel.setPreferredSize(LABEL_PREFERRED_SIZE);
 
     _overwrite = new JComboBox<Boolean>();
     _overwrite.addItem(Boolean.TRUE);
@@ -138,7 +139,7 @@ public class Gui implements JDirectoryChooserListener, JPEGFilesListener {
     // ---------------------------------------------------------
 
     JLabel maxVisualDiffLabel = new JLabel(" Max Diff : ");
-    maxVisualDiffLabel.setPreferredSize(new Dimension(75, 1));
+    maxVisualDiffLabel.setPreferredSize(LABEL_PREFERRED_SIZE);
 
     _maxVisualDiff = new JComboBox<Double>();
     for (int i = 0; i < 100; ++i) {
@@ -176,7 +177,7 @@ public class Gui implements JDirectoryChooserListener, JPEGFilesListener {
     // ---------------------------------------------------------
 
     JLabel numThreadsLabel = new JLabel(" Number of threads : ");
-    numThreadsLabel.setPreferredSize(new Dimension(75, 1));
+    numThreadsLabel.setPreferredSize(LABEL_PREFERRED_SIZE);
 
     _numThreads = new JComboBox<Integer>();
     for (int i = 1; i <= Runtime.getRuntime().availableProcessors(); ++i) {
@@ -451,12 +452,7 @@ public class Gui implements JDirectoryChooserListener, JPEGFilesListener {
               e.printStackTrace();
             }
           }
-          try {
-            threadPool.awaitTermination(365, TimeUnit.DAYS);
-          } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-          }
+          threadPool.shutdown();
 
           // End
           _jprogressBar.setValue(100);
