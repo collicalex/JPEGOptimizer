@@ -54,7 +54,7 @@ import utils.ReadableUtils;
 
 public class Gui implements JDirectoryChooserListener, JPEGFilesListener {
 
-  private static int LEFT_COLUMN_WIDTH = 100;
+  private static int LEFT_COLUMN_WIDTH = 125;
   private static final Dimension LABEL_PREFERRED_SIZE = new Dimension(LEFT_COLUMN_WIDTH, 1);
   private JDirectoryChooser _srcDir;
   private JDirectoryChooser _dstDir;
@@ -346,6 +346,7 @@ public class Gui implements JDirectoryChooserListener, JPEGFilesListener {
       writer.write(_minSize.getSelectedIndex() + "\n");
       writer.write(_overwrite.getSelectedIndex() + "\n");
       writer.write(_maxVisualDiff.getSelectedIndex() + "\n");
+      writer.write(_numThreads.getSelectedIndex() + "\n");
       writer.flush();
     } catch (Exception e) {
       e.printStackTrace();
@@ -373,6 +374,11 @@ public class Gui implements JDirectoryChooserListener, JPEGFilesListener {
       _minSize.setSelectedIndex(Integer.parseInt(reader.readLine()));
       _overwrite.setSelectedIndex(Integer.parseInt(reader.readLine()));
       _maxVisualDiff.setSelectedIndex(Integer.parseInt(reader.readLine()));
+      int numThreadsIndex = Integer.parseInt(reader.readLine());
+      if (numThreadsIndex >= _numThreads.getItemCount()) {
+        numThreadsIndex = _numThreads.getItemCount() - 1;
+      }
+      _numThreads.setSelectedIndex(numThreadsIndex);
     } catch (Exception e) {
       e.printStackTrace();
     } finally {

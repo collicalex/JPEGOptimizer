@@ -145,6 +145,7 @@ public class JPEGFiles {
 
     long start1 = System.currentTimeMillis();
     ImageUtils.createJPEG(_src, tmp, quality);
+
     long end1 = System.currentTimeMillis();
     log("   * Size : " + ReadableUtils.fileSize(tmp.length()) + "\t (" + ReadableUtils.interval(end1 - start1) + ")");
     incCurrentOptimStep();
