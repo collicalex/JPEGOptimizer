@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
+
+#project-title {
+	font-family         : 'Fredericka the Great', cursive;
+	font-size			: 55px;
+}
+
+#footer-title {
+	font-family         : 'Fredericka the Great', cursive;
+	font-size			: 20px;
+}
